@@ -48,14 +48,14 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
       label: 'Colaboradores Ativos',
       value: stats.totalColaboradores,
       icon: Users,
-      color: 'bg-blue-500',
+      iconColor: 'text-blue-500',
       bg: 'bg-blue-50',
     },
     {
       label: 'Total BOS',
       value: stats.totalBOS,
       icon: AlertTriangle,
-      color: 'bg-red-500',
+      iconColor: 'text-red-500',
       bg: 'bg-red-50',
       sub: `${stats.bosMes} este mês`,
     },
@@ -63,7 +63,7 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
       label: 'Total BOA',
       value: stats.totalBOA,
       icon: CheckCircle,
-      color: 'bg-green-500',
+      iconColor: 'text-green-500',
       bg: 'bg-green-50',
       sub: `${stats.boaMes} este mês`,
     },
@@ -71,7 +71,7 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
       label: 'Registros Abertos',
       value: stats.abertos,
       icon: Clock,
-      color: 'bg-yellow-500',
+      iconColor: 'text-yellow-500',
       bg: 'bg-yellow-50',
     },
   ]
@@ -82,15 +82,15 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
         {statCards.map((card) => {
           const Icon = card.icon
           return (
-            <div key={card.label} className="card flex items-center gap-4">
+            <div key={card.label} className="card dark:bg-gray-800 dark:border-gray-700 flex items-center gap-4">
               <div className={`${card.bg} p-3 rounded-xl`}>
-                <Icon className={`w-6 h-6 ${card.color.replace('bg-', 'text-')}`} />
+                <Icon className={`w-6 h-6 ${card.iconColor}`} />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">{card.value}</p>
-                <p className="text-sm text-gray-500">{card.label}</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{card.value}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{card.label}</p>
                 {card.sub && (
-                  <p className="text-xs text-gray-400">{card.sub}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500">{card.sub}</p>
                 )}
               </div>
             </div>
@@ -99,8 +99,8 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="card lg:col-span-2">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">
+        <div className="card dark:bg-gray-800 dark:border-gray-700 lg:col-span-2">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">
             Registros por Mês (últimos 6 meses)
           </h2>
           <ResponsiveContainer width="100%" height={280}>
@@ -116,8 +116,8 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
           </ResponsiveContainer>
         </div>
 
-        <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">
+        <div className="card dark:bg-gray-800 dark:border-gray-700">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">
             Distribuição BOS vs BOA
           </h2>
           {stats.totalBOS + stats.totalBOA > 0 ? (
@@ -160,25 +160,25 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-3">Resumo do Mês</h2>
+        <div className="card dark:bg-gray-800 dark:border-gray-700">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">Resumo do Mês</h2>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <TrendingDown className="w-4 h-4 text-red-500" />
-                <span className="text-sm text-gray-600">BOS registrados</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">BOS registrados</span>
               </div>
               <span className="font-semibold text-red-600">{stats.bosMes}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-green-500" />
-                <span className="text-sm text-gray-600">BOA registrados</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">BOA registrados</span>
               </div>
               <span className="font-semibold text-green-600">{stats.boaMes}</span>
             </div>
-            <div className="border-t pt-3 flex items-center justify-between">
-              <span className="text-sm font-medium text-gray-700">Saldo do mês</span>
+            <div className="border-t dark:border-gray-700 pt-3 flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Saldo do mês</span>
               <span className={`font-bold ${stats.boaMes - stats.bosMes >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {stats.boaMes - stats.bosMes >= 0 ? '+' : ''}{stats.boaMes - stats.bosMes}
               </span>
@@ -186,29 +186,29 @@ export function DashboardClient({ stats, monthlyData }: DashboardClientProps) {
           </div>
         </div>
 
-        <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-3">Status dos Registros</h2>
+        <div className="card dark:bg-gray-800 dark:border-gray-700">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">Status dos Registros</h2>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                <span className="text-sm text-gray-600">Em aberto</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Em aberto</span>
               </div>
               <span className="font-semibold text-yellow-600">{stats.abertos}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-blue-400" />
-                <span className="text-sm text-gray-600">Total geral</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Total geral</span>
               </div>
               <span className="font-semibold text-blue-600">{stats.totalBOS + stats.totalBOA}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-gray-400" />
-                <span className="text-sm text-gray-600">Colaboradores</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">Colaboradores</span>
               </div>
-              <span className="font-semibold text-gray-600">{stats.totalColaboradores}</span>
+              <span className="font-semibold text-gray-600 dark:text-gray-400">{stats.totalColaboradores}</span>
             </div>
           </div>
         </div>

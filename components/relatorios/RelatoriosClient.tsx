@@ -1,227 +1,317 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useTheme } from 'next-themes'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid, PolarAngleAxis
+  LineChart, Line, PieChart, Pie, Cell,
 } from 'recharts'
-import { Calendar, TrendingUp } from 'lucide-react'
+import { Calendar, Download, Users, AlertTriangle, CheckCircle, TrendingUp } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 type RegistroRelatorio = {
-  tipo: string
+  tipo: 'BOS' | 'BOA'
   categoria: string
   status: string
   pontuacao: number
   data_ocorrencia: string
-  created_at: string
-  colaboradores?: { nome: string; setor: string } | null
+  colaboradores: { nome: string; setor: string } | null
 }
 
 interface Props {
   registros: RegistroRelatorio[]
+  totalColaboradores: number
 }
 
-const COLORS = ['#3b82f6', '#ef4444', '#22c55e', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6']
+const COLORS = ['#3b82f6', '#ef4444', '#22c55e', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
+const MONTHS = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 
-export function RelatoriosClient({ registros }: Props) {
+const PERIODOS = [
+  { value: '1m', label: '1 mês' },
+  { value: '3m', label: '3 meses' },
+  { value: '6m', label: '6 meses' },
+  { value: '12m', label: '12 meses' },
+  { value: 'all', label: 'Tudo' },
+]
+
+function getCutoff(periodo: string): Date {
+  const now = new Date()
+  if (periodo === '1m') return new Date(now.getFullYear(), now.getMonth() - 1, 1)
+  if (periodo === '3m') return new Date(now.getFullYear(), now.getMonth() - 3, 1)
+  if (periodo === '6m') return new Date(now.getFullYear(), now.getMonth() - 6, 1)
+  if (periodo === '12m') return new Date(now.getFullYear(), now.getMonth() - 12, 1)
+  return new Date(0)
+}
+
+export function RelatoriosClient({ registros, totalColaboradores }: Props) {
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
+
   const [periodo, setPeriodo] = useState('6m')
+  const [filterSetor, setFilterSetor] = useState('todos')
 
-  const cutoff = useMemo(() => {
-    const now = new Date()
-    if (periodo === '1m') return new Date(now.getFullYear(), now.getMonth() - 1, 1)
-    if (periodo === '3m') return new Date(now.getFullYear(), now.getMonth() - 3, 1)
-    if (periodo === '6m') return new Date(now.getFullYear(), now.getMonth() - 6, 1)
-    if (periodo === '12m') return new Date(now.getFullYear(), now.getMonth() - 12, 1)
-    return new Date(0)
-  }, [periodo])
+  const gridColor = isDark ? '#374151' : '#f0f0f0'
+  const tickColor = isDark ? '#9ca3af' : '#6b7280'
+  const tooltipStyle = isDark
+    ? { backgroundColor: '#1f2937', border: '1px solid #374151', color: '#f9fafb' }
+    : { backgroundColor: '#fff', border: '1px solid #e5e7eb', color: '#111827' }
 
-  const filtered = useMemo(
-    () => registros.filter((r) => new Date(r.data_ocorrencia) >= cutoff),
-    [registros, cutoff]
+  const cutoff = useMemo(() => getCutoff(periodo), [periodo])
+
+  const setores = useMemo(
+    () => Array.from(new Set(registros.map((r) => r.colaboradores?.setor ?? '').filter(Boolean))).sort(),
+    [registros]
+  )
+
+  const filtered = useMemo(() =>
+    registros.filter((r) => {
+      const matchPeriodo = new Date(r.data_ocorrencia) >= cutoff
+      const matchSetor = filterSetor === 'todos' || r.colaboradores?.setor === filterSetor
+      return matchPeriodo && matchSetor
+    }),
+    [registros, cutoff, filterSetor]
+  )
+
+  const totalBOS = useMemo(() => filtered.filter((r) => r.tipo === 'BOS').length, [filtered])
+  const totalBOA = useMemo(() => filtered.filter((r) => r.tipo === 'BOA').length, [filtered])
+  const mediaPontos = useMemo(() => {
+    if (filtered.length === 0) return 0
+    const net = filtered.reduce((acc, r) => acc + (r.tipo === 'BOA' ? r.pontuacao : -r.pontuacao), 0)
+    return Math.round(net / filtered.length)
+  }, [filtered])
+  const colaboradoresFiltrados = useMemo(() =>
+    filterSetor === 'todos'
+      ? totalColaboradores
+      : new Set(filtered.map((r) => r.colaboradores?.nome).filter(Boolean)).size,
+    [filtered, filterSetor, totalColaboradores]
   )
 
   const monthlyData = useMemo(() => {
-    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-    const map = new Map<string, { mes: string; BOS: number; BOA: number; total: number }>()
-
+    const map = new Map<string, { mes: string; BOS: number; BOA: number; saldo: number; order: string }>()
     for (const r of filtered) {
       const d = new Date(r.data_ocorrencia)
-      const key = `${d.getFullYear()}-${d.getMonth()}`
-      const label = `${months[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`
-      const existing = map.get(key) ?? { mes: label, BOS: 0, BOA: 0, total: 0 }
-      if (r.tipo === 'BOS') existing.BOS++
-      else existing.BOA++
-      existing.total++
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`
+      const label = `${MONTHS[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`
+      const existing = map.get(key) ?? { mes: label, BOS: 0, BOA: 0, saldo: 0, order: key }
+      if (r.tipo === 'BOS') { existing.BOS++; existing.saldo -= r.pontuacao }
+      else { existing.BOA++; existing.saldo += r.pontuacao }
       map.set(key, existing)
     }
-
-    return Array.from(map.values()).sort((a, b) => a.mes.localeCompare(b.mes))
+    return Array.from(map.values()).sort((a, b) => a.order.localeCompare(b.order))
   }, [filtered])
 
   const categoriaData = useMemo(() => {
-    const map = new Map<string, { categoria: string; BOS: number; BOA: number }>()
-    for (const r of filtered) {
-      const existing = map.get(r.categoria) ?? { categoria: r.categoria, BOS: 0, BOA: 0 }
-      if (r.tipo === 'BOS') existing.BOS++
-      else existing.BOA++
-      map.set(r.categoria, existing)
-    }
-    return Array.from(map.values()).sort((a, b) => (b.BOS + b.BOA) - (a.BOS + a.BOA)).slice(0, 8)
-  }, [filtered])
-
-  const setorData = useMemo(() => {
-    const map = new Map<string, { setor: string; BOS: number; BOA: number }>()
-    for (const r of filtered) {
-      const setor = r.colaboradores?.setor ?? 'Sem setor'
-      const existing = map.get(setor) ?? { setor, BOS: 0, BOA: 0 }
-      if (r.tipo === 'BOS') existing.BOS++
-      else existing.BOA++
-      map.set(setor, existing)
-    }
-    return Array.from(map.values())
-  }, [filtered])
-
-  const statusData = useMemo(() => {
     const map = new Map<string, number>()
     for (const r of filtered) {
-      map.set(r.status, (map.get(r.status) ?? 0) + 1)
+      map.set(r.categoria, (map.get(r.categoria) ?? 0) + 1)
     }
-    return Array.from(map.entries()).map(([name, value]) => ({
-      name: name === 'aberto' ? 'Aberto' : name === 'em_analise' ? 'Em Análise' : 'Encerrado',
-      value,
-    }))
+    return Array.from(map.entries())
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 8)
   }, [filtered])
 
-  const totalBOS = filtered.filter((r) => r.tipo === 'BOS').length
-  const totalBOA = filtered.filter((r) => r.tipo === 'BOA').length
+  const pontosData = useMemo(() => {
+    const map = new Map<string, { mes: string; total: number; count: number; order: string }>()
+    for (const r of filtered) {
+      const d = new Date(r.data_ocorrencia)
+      const key = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`
+      const label = `${MONTHS[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`
+      const existing = map.get(key) ?? { mes: label, total: 0, count: 0, order: key }
+      existing.total += r.tipo === 'BOA' ? r.pontuacao : -r.pontuacao
+      existing.count++
+      map.set(key, existing)
+    }
+    return Array.from(map.values())
+      .sort((a, b) => a.order.localeCompare(b.order))
+      .map(({ mes, total, count }) => ({ mes, media: count > 0 ? Math.round(total / count) : 0 }))
+  }, [filtered])
+
+  const handleExport = () => window.print()
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Calendar className="w-4 h-4" />
-          <span>{filtered.length} registros no período</span>
+      {/* Toolbar */}
+      <div className="no-print flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <Calendar className="w-4 h-4" />
+            <span>{filtered.length} registros no período</span>
+          </div>
+          <select
+            value={filterSetor}
+            onChange={(e) => setFilterSetor(e.target.value)}
+            className="input-field w-auto text-sm"
+          >
+            <option value="todos">Todos os setores</option>
+            {setores.map((s) => <option key={s} value={s}>{s}</option>)}
+          </select>
         </div>
-        <div className="flex gap-2">
-          {[
-            { value: '1m', label: '1 mês' },
-            { value: '3m', label: '3 meses' },
-            { value: '6m', label: '6 meses' },
-            { value: '12m', label: '12 meses' },
-            { value: 'all', label: 'Tudo' },
-          ].map((p) => (
-            <button
-              key={p.value}
-              onClick={() => setPeriodo(p.value)}
-              className={`px-3 py-1.5 text-sm rounded-lg font-medium transition-colors ${
-                periodo === p.value
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
-              }`}
-            >
-              {p.label}
-            </button>
-          ))}
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex gap-1.5">
+            {PERIODOS.map((p) => (
+              <button
+                key={p.value}
+                onClick={() => setPeriodo(p.value)}
+                className={cn(
+                  'px-3 py-1.5 text-sm rounded-lg font-medium transition-colors',
+                  periodo === p.value
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+                )}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={handleExport}
+            className="btn-secondary flex items-center gap-2 text-sm"
+          >
+            <Download className="w-4 h-4" />
+            Exportar PDF
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card text-center">
-          <p className="text-3xl font-bold text-gray-900">{filtered.length}</p>
-          <p className="text-sm text-gray-500 mt-1">Total de Registros</p>
+          <Users className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+          <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">{colaboradoresFiltrados}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Colaboradores Ativos</p>
         </div>
         <div className="card text-center">
-          <p className="text-3xl font-bold text-red-600">{totalBOS}</p>
-          <p className="text-sm text-gray-500 mt-1">Total BOS</p>
+          <AlertTriangle className="w-6 h-6 text-red-500 mx-auto mb-2" />
+          <p className="text-3xl font-bold text-red-600 dark:text-red-400">{totalBOS}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total BOS</p>
         </div>
         <div className="card text-center">
-          <p className="text-3xl font-bold text-green-600">{totalBOA}</p>
-          <p className="text-sm text-gray-500 mt-1">Total BOA</p>
+          <CheckCircle className="w-6 h-6 text-green-500 mx-auto mb-2" />
+          <p className="text-3xl font-bold text-green-600 dark:text-green-400">{totalBOA}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total BOA</p>
+        </div>
+        <div className="card text-center">
+          <TrendingUp className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+          <p className={cn('text-3xl font-bold', mediaPontos >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400')}>
+            {mediaPontos > 0 ? '+' : ''}{mediaPontos}
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Média de Pontos</p>
         </div>
       </div>
 
+      {/* Charts row 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Evolução Mensal</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={monthlyData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="BOS" stroke="#ef4444" strokeWidth={2} dot={{ r: 4 }} name="BOS" />
-              <Line type="monotone" dataKey="BOA" stroke="#22c55e" strokeWidth={2} dot={{ r: 4 }} name="BOA" />
-            </LineChart>
-          </ResponsiveContainer>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">Registros por Mês</h2>
+          {monthlyData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: tickColor }} />
+                <YAxis tick={{ fontSize: 11, fill: tickColor }} />
+                <Tooltip contentStyle={tooltipStyle} />
+                <Legend wrapperStyle={{ color: tickColor, fontSize: 12 }} />
+                <Bar dataKey="BOS" fill="#ef4444" radius={[4, 4, 0, 0]} name="BOS" />
+                <Bar dataKey="BOA" fill="#22c55e" radius={[4, 4, 0, 0]} name="BOA" />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-48 text-gray-400 dark:text-gray-500 text-sm">Sem dados no período</div>
+          )}
         </div>
 
         <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Registros por Categoria</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={categoriaData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 11 }} />
-              <YAxis dataKey="categoria" type="category" tick={{ fontSize: 11 }} width={100} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="BOS" fill="#ef4444" name="BOS" />
-              <Bar dataKey="BOA" fill="#22c55e" name="BOA" />
-            </BarChart>
-          </ResponsiveContainer>
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">Evolução da Pontuação Média</h2>
+          {pontosData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={260}>
+              <LineChart data={pontosData}>
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: tickColor }} />
+                <YAxis tick={{ fontSize: 11, fill: tickColor }} />
+                <Tooltip contentStyle={tooltipStyle} formatter={(v: number) => [`${v > 0 ? '+' : ''}${v}`, 'Pontuação média']} />
+                <Line
+                  type="monotone"
+                  dataKey="media"
+                  stroke="#8b5cf6"
+                  strokeWidth={2.5}
+                  dot={{ r: 4, fill: '#8b5cf6' }}
+                  activeDot={{ r: 6 }}
+                  name="Pontuação média"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-48 text-gray-400 dark:text-gray-500 text-sm">Sem dados no período</div>
+          )}
         </div>
+      </div>
 
+      {/* Charts row 2 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Registros por Setor</h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={setorData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="setor" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="BOS" fill="#ef4444" name="BOS" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="BOA" fill="#22c55e" name="BOA" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="card">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Distribuição por Status</h2>
-          {statusData.length > 0 ? (
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">Distribuição por Categoria</h2>
+          {categoriaData.length > 0 ? (
             <>
-              <ResponsiveContainer width="100%" height={200}>
+              <ResponsiveContainer width="100%" height={220}>
                 <PieChart>
                   <Pie
-                    data={statusData}
+                    data={categoriaData}
                     cx="50%"
                     cy="50%"
-                    outerRadius={80}
-                    paddingAngle={5}
+                    outerRadius={85}
+                    innerRadius={40}
+                    paddingAngle={3}
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
                   >
-                    {statusData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {categoriaData.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip contentStyle={tooltipStyle} formatter={(v: number, n: string) => [v, n]} />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="flex flex-wrap justify-center gap-3 mt-2">
-                {statusData.map((s, i) => (
-                  <div key={s.name} className="flex items-center gap-1.5">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                    <span className="text-xs text-gray-600">{s.name}: {s.value}</span>
+              <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 mt-2">
+                {categoriaData.map((c, i) => (
+                  <div key={c.name} className="flex items-center gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{c.name} ({c.value})</span>
                   </div>
                 ))}
               </div>
             </>
           ) : (
-            <div className="flex items-center justify-center h-48 text-gray-400 text-sm">
-              Nenhum dado disponível
-            </div>
+            <div className="flex items-center justify-center h-48 text-gray-400 dark:text-gray-500 text-sm">Sem dados no período</div>
+          )}
+        </div>
+
+        <div className="card">
+          <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-4">Saldo de Pontuação Mensal</h2>
+          {monthlyData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={monthlyData}>
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
+                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: tickColor }} />
+                <YAxis tick={{ fontSize: 11, fill: tickColor }} />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  formatter={(v: number) => [`${v > 0 ? '+' : ''}${v}`, 'Saldo']}
+                />
+                <Bar
+                  dataKey="saldo"
+                  name="Saldo"
+                  radius={[4, 4, 0, 0]}
+                  fill="#8b5cf6"
+                >
+                  {monthlyData.map((entry, i) => (
+                    <Cell key={i} fill={entry.saldo >= 0 ? '#22c55e' : '#ef4444'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-48 text-gray-400 dark:text-gray-500 text-sm">Sem dados no período</div>
           )}
         </div>
       </div>

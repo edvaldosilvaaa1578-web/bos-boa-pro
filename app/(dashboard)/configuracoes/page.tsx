@@ -3,7 +3,7 @@ import { Header } from '@/components/layout/Header'
 import { ConfiguracoesClient } from '@/components/configuracoes/ConfiguracoesClient'
 
 export default async function ConfiguracoesPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   const [{ data: setores }, { data: categorias }] = await Promise.all([
     supabase.from('setores').select('*').order('nome'),

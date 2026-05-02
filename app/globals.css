@@ -2,9 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@media print {
+  .no-print { display: none !important; }
+  nav, aside { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .card { border: 1px solid #e5e7eb !important; box-shadow: none !important; break-inside: avoid; }
+  .dark body { background: white !important; color: black !important; }
+}
+
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100;
   }
 }
 
@@ -14,7 +22,7 @@
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg border border-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700;
   }
 
   .btn-danger {
@@ -22,11 +30,11 @@
   }
 
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm;
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6;
+    @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6 dark:bg-gray-800 dark:border-gray-700;
   }
 
   .badge {

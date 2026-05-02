@@ -6,7 +6,7 @@ import { Database } from '@/lib/supabase/types'
 type Registro = Database['public']['Tables']['registros']['Row']
 
 export default async function DashboardPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
 
   const { count: totalColaboradores } = await supabase
     .from('colaboradores')

@@ -3,14 +3,9 @@ import { Header } from '@/components/layout/Header'
 import { ColaboradoresClient } from '@/components/colaboradores/ColaboradoresClient'
 
 export default async function ColaboradoresPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
   const { data: colaboradores } = await supabase
     .from('colaboradores')
-    .select('*')
-    .order('nome')
-
-  const { data: setores } = await supabase
-    .from('setores')
     .select('*')
     .order('nome')
 
@@ -22,7 +17,6 @@ export default async function ColaboradoresPage() {
       />
       <ColaboradoresClient
         colaboradores={colaboradores ?? []}
-        setores={setores ?? []}
       />
     </div>
   )

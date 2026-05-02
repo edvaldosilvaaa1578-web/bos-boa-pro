@@ -12,9 +12,11 @@ import {
   Settings,
   Shield,
   LogOut,
+  UserCog,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import type { UserPerfil } from '@/app/(dashboard)/layout'
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -25,7 +27,17 @@ const navItems = [
   { href: '/configuracoes', label: 'Configurações', icon: Settings },
 ]
 
-export function Sidebar() {
+const ROLE_LABELS: Record<string, string> = {
+  admin: 'Administrador',
+  gestor: 'Gestor',
+  viewer: 'Visualizador',
+}
+
+interface Props {
+  userPerfil: UserPerfil
+}
+
+export function Sidebar({ userPerfil }: Props) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
@@ -35,6 +47,8 @@ export function Sidebar() {
     router.push('/login')
     router.refresh()
   }
+
+  const initial = userPerfil.nome.charAt(0).toUpperCase()
 
   return (
     <div className="fixed inset-y-0 left-0 w-64 bg-primary-900 text-white flex flex-col z-50">
@@ -68,9 +82,33 @@ export function Sidebar() {
             </Link>
           )
         })}
+
+        {userPerfil.role === 'admin' && (
+          <Link
+            href="/usuarios"
+            className={cn(
+              'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+              pathname === '/usuarios'
+                ? 'bg-primary-700 text-white'
+                : 'text-primary-300 hover:bg-primary-800 hover:text-white'
+            )}
+          >
+            <UserCog className="w-5 h-5 flex-shrink-0" />
+            Usuários
+          </Link>
+        )}
       </nav>
 
-      <div className="px-3 py-4 border-t border-primary-700">
+      <div className="px-4 py-4 border-t border-primary-700 space-y-2">
+        <div className="flex items-center gap-3 px-1">
+          <div className="w-8 h-8 rounded-full bg-primary-700 flex items-center justify-center flex-shrink-0">
+            <span className="text-xs font-bold text-primary-200">{initial}</span>
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-white truncate">{userPerfil.nome}</p>
+            <p className="text-xs text-primary-400">{ROLE_LABELS[userPerfil.role] ?? userPerfil.role}</p>
+          </div>
+        </div>
         <button
           onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-primary-300 hover:bg-primary-800 hover:text-white transition-colors w-full"
