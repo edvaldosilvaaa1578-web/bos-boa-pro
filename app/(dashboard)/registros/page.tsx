@@ -12,12 +12,12 @@ export default async function RegistrosPage() {
   const supabase = await createServerClient()
 
   const { data: registrosRaw } = await supabase
-    .from('registros')
+    .from('registros_v2')
     .select('*, colaboradores(nome, setor, matricula), categorias(nome, pontos)')
     .order('created_at', { ascending: false })
 
   const { data: colaboradores } = await supabase
-    .from('colaboradores')
+    .from('colaboradores_v2')
     .select('id, nome, matricula, setor')
     .eq('ativo', true)
     .order('nome')

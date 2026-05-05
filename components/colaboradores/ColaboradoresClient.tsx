@@ -141,7 +141,7 @@ export function ColaboradoresClient({ colaboradores: initial }: Props) {
 
     if (editingId) {
       const { data: updated, error } = await supabase
-        .from('colaboradores')
+        .from('colaboradores_v2')
         .update({ ...payload, updated_at: new Date().toISOString() })
         .eq('id', editingId)
         .select()
@@ -159,7 +159,7 @@ export function ColaboradoresClient({ colaboradores: initial }: Props) {
       }
     } else {
       const { data: created, error } = await supabase
-        .from('colaboradores')
+        .from('colaboradores_v2')
         .insert(payload)
         .select()
         .single()
@@ -181,7 +181,7 @@ export function ColaboradoresClient({ colaboradores: initial }: Props) {
 
   const toggleAtivo = async (c: Colaborador) => {
     const { data: updated } = await supabase
-      .from('colaboradores')
+      .from('colaboradores_v2')
       .update({ ativo: !c.ativo, updated_at: new Date().toISOString() })
       .eq('id', c.id)
       .select()

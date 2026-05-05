@@ -16,11 +16,11 @@ export default async function RelatoriosPage() {
 
   const [{ data: registrosData }, { count: totalColaboradores }] = await Promise.all([
     supabase
-      .from('registros')
+      .from('registros_v2')
       .select('tipo, categoria, status, pontuacao, data_ocorrencia, colaboradores(nome, setor)')
       .order('data_ocorrencia', { ascending: false }),
     supabase
-      .from('colaboradores')
+      .from('colaboradores_v2')
       .select('*', { count: 'exact', head: true })
       .eq('ativo', true),
   ])

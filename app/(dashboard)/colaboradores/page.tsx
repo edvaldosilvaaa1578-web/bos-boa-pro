@@ -5,7 +5,7 @@ import { ColaboradoresClient } from '@/components/colaboradores/ColaboradoresCli
 export default async function ColaboradoresPage() {
   const supabase = await createServerClient()
   const { data: colaboradores } = await supabase
-    .from('colaboradores')
+    .from('colaboradores_v2')
     .select('*')
     .order('nome')
 

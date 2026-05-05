@@ -15,7 +15,7 @@ export default async function RankingPage() {
   const supabase = await createServerClient()
 
   const { data } = await supabase
-    .from('colaboradores')
+    .from('colaboradores_v2')
     .select(`
       id, nome, matricula, cargo, setor,
       registros(tipo, pontos, data_ocorrencia)

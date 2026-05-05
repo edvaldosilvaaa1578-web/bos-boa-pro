@@ -142,7 +142,7 @@ export function RegistrosClient({ registros: initial, colaboradores, categorias 
     console.log('payload:', payload)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const table = (supabase as any).from('registros')
+    const table = (supabase as any).from('registros_v2')
 
     if (editingId) {
       const { data: updated, error } = await table
@@ -184,7 +184,7 @@ export function RegistrosClient({ registros: initial, colaboradores, categorias 
 
   const handleDelete = async (id: string) => {
     if (!confirm('Deseja excluir este registro?')) return
-    const { error } = await supabase.from('registros').delete().eq('id', id)
+    const { error } = await supabase.from('registros_v2').delete().eq('id', id)
     if (!error) setRegistros((prev) => prev.filter((r) => r.id !== id))
   }
 

@@ -9,12 +9,12 @@ export default async function DashboardPage() {
   const supabase = await createServerClient()
 
   const { count: totalColaboradores } = await supabase
-    .from('colaboradores')
+    .from('colaboradores_v2')
     .select('*', { count: 'exact', head: true })
     .eq('ativo', true)
 
   const { data: registrosRaw } = await supabase
-    .from('registros')
+    .from('registros_v2')
     .select('*')
     .order('created_at', { ascending: false })
 
@@ -22,7 +22,7 @@ export default async function DashboardPage() {
 
   const inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
   const { data: registrosMesRaw } = await supabase
-    .from('registros')
+    .from('registros_v2')
     .select('*')
     .gte('created_at', inicioMes)
 
