@@ -35,10 +35,8 @@ export function Sidebar({ userPerfil }: Props) {
   const supabase = createClient()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Fecha o menu ao navegar
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
-  // Bloqueia scroll quando menu aberto
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -57,11 +55,11 @@ export function Sidebar({ userPerfil }: Props) {
     ...(userPerfil.role === 'admin' ? [{ href: '/usuarios', label: 'Usuários', icon: UserCog }] : []),
   ]
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-primary-900 text-white">
-      {/* Header */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-primary-700">
-        <div className="flex items-center gap-3">
+  return (
+    <>
+      {/* ===== DESKTOP SIDEBAR ===== */}
+      <div className="hidden lg:flex fixed inset-y-0 left-0 w-64 z-50 flex-col bg-primary-900 text-white">
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-primary-700">
           <div className="bg-primary-700 p-2 rounded-lg">
             <Shield className="w-5 h-5 text-primary-200" />
           </div>
@@ -70,101 +68,123 @@ export function Sidebar({ userPerfil }: Props) {
             <p className="text-primary-400 text-xs">Pro</p>
           </div>
         </div>
-        {/* Botão fechar no mobile */}
-        <button
-          onClick={() => setMobileOpen(false)}
-          className="lg:hidden p-1.5 rounded-lg hover:bg-primary-800 text-primary-300"
-        >
-          <X className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {allNavItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-primary-700 text-white'
-                  : 'text-primary-300 hover:bg-primary-800 hover:text-white'
-              )}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              {item.label}
-            </Link>
-          )
-        })}
-      </nav>
-
-      {/* Footer */}
-      <div className="px-4 py-4 border-t border-primary-700 space-y-2">
-        <div className="flex items-center gap-3 px-1">
-          <div className="w-8 h-8 rounded-full bg-primary-700 flex items-center justify-center flex-shrink-0">
-            <span className="text-xs font-bold text-primary-200">{initial}</span>
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          {allNavItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+            return (
+              <Link key={item.href} href={item.href}
+                className={cn(
+                  'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                  isActive ? 'bg-primary-700 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white'
+                )}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+        <div className="px-4 py-4 border-t border-primary-700 space-y-2">
+          <div className="flex items-center gap-3 px-1">
+            <div className="w-8 h-8 rounded-full bg-primary-700 flex items-center justify-center flex-shrink-0">
+              <span className="text-xs font-bold text-primary-200">{initial}</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white truncate">{userPerfil.nome}</p>
+              <p className="text-xs text-primary-400">{ROLE_LABELS[userPerfil.role] ?? userPerfil.role}</p>
+            </div>
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-white truncate">{userPerfil.nome}</p>
-            <p className="text-xs text-primary-400">{ROLE_LABELS[userPerfil.role] ?? userPerfil.role}</p>
-          </div>
+          <button onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-primary-300 hover:bg-primary-800 hover:text-white transition-colors w-full"
+          >
+            <LogOut className="w-5 h-5" />
+            Sair
+          </button>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-primary-300 hover:bg-primary-800 hover:text-white transition-colors w-full"
-        >
-          <LogOut className="w-5 h-5" />
-          Sair
-        </button>
-      </div>
-    </div>
-  )
-
-  return (
-    <>
-      {/* Desktop sidebar */}
-      <div className="hidden lg:flex fixed inset-y-0 left-0 w-64 z-50 flex-col">
-        <SidebarContent />
       </div>
 
-      {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-primary-900 text-white flex items-center justify-between px-4 py-3 shadow-lg">
+      {/* ===== MOBILE TOP BAR ===== */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-primary-900 text-white flex items-center justify-between px-4 h-14 shadow-lg">
         <div className="flex items-center gap-2">
           <div className="bg-primary-700 p-1.5 rounded-lg">
             <Shield className="w-4 h-4 text-primary-200" />
           </div>
           <span className="font-bold text-sm">Gestão BOS/BOA</span>
         </div>
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="p-2 rounded-lg hover:bg-primary-800 text-primary-300"
-        >
-          <Menu className="w-5 h-5" />
+        <button onClick={() => setMobileOpen(true)} className="p-2 rounded-lg text-primary-300 hover:bg-primary-800">
+          <Menu className="w-6 h-6" />
         </button>
       </div>
 
-      {/* Mobile overlay */}
+      {/* ===== MOBILE OVERLAY ===== */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-50 bg-black/60"
+          className="lg:hidden fixed inset-0 bg-black/70 z-50"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* Mobile drawer */}
+      {/* ===== MOBILE DRAWER ===== */}
       <div className={cn(
-        'lg:hidden fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ease-in-out',
+        'lg:hidden fixed top-0 left-0 bottom-0 w-72 z-50 flex flex-col bg-primary-900 text-white transform transition-transform duration-300',
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
       )}>
-        <SidebarContent />
+        <div className="flex items-center justify-between px-6 py-5 border-b border-primary-700">
+          <div className="flex items-center gap-3">
+            <div className="bg-primary-700 p-2 rounded-lg">
+              <Shield className="w-5 h-5 text-primary-200" />
+            </div>
+            <div>
+              <p className="font-bold text-sm">Gestão BOS/BOA</p>
+              <p className="text-primary-400 text-xs">Pro</p>
+            </div>
+          </div>
+          <button onClick={() => setMobileOpen(false)} className="p-1.5 rounded-lg text-primary-300 hover:bg-primary-800">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          {allNavItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+            return (
+              <Link key={item.href} href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={cn(
+                  'flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors',
+                  isActive ? 'bg-primary-700 text-white' : 'text-primary-300 hover:bg-primary-800 hover:text-white'
+                )}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {item.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="px-4 py-4 border-t border-primary-700 space-y-2">
+          <div className="flex items-center gap-3 px-1">
+            <div className="w-9 h-9 rounded-full bg-primary-700 flex items-center justify-center flex-shrink-0">
+              <span className="text-sm font-bold text-primary-200">{initial}</span>
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-white truncate">{userPerfil.nome}</p>
+              <p className="text-xs text-primary-400">{ROLE_LABELS[userPerfil.role] ?? userPerfil.role}</p>
+            </div>
+          </div>
+          <button onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-primary-300 hover:bg-primary-800 hover:text-white transition-colors w-full"
+          >
+            <LogOut className="w-5 h-5" />
+            Sair
+          </button>
+        </div>
       </div>
 
-      {/* Mobile bottom nav (5 itens principais) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex items-center justify-around px-2 py-1 safe-area-pb">
+      {/* ===== MOBILE BOTTOM NAV ===== */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex items-center justify-around py-2">
         {[
           { href: '/dashboard', label: 'Início', icon: LayoutDashboard },
           { href: '/colaboradores', label: 'Equipe', icon: Users },
@@ -175,19 +195,14 @@ export function Sidebar({ userPerfil }: Props) {
           const Icon = item.icon
           const isActive = pathname === item.href
           return (
-            <Link
-              key={item.href}
-              href={item.href}
+            <Link key={item.href} href={item.href}
               className={cn(
-                'flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-colors min-w-0 flex-1',
-                isActive
-                  ? 'text-primary-600 dark:text-primary-400'
-                  : 'text-gray-500 dark:text-gray-400'
+                'flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl flex-1',
+                isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'
               )}
             >
-              <Icon className={cn('w-5 h-5', isActive && 'scale-110 transition-transform')} />
-              <span className="text-[10px] font-medium truncate">{item.label}</span>
-              {isActive && <div className="w-1 h-1 rounded-full bg-primary-600 dark:bg-primary-400" />}
+              <Icon className="w-5 h-5" />
+              <span className="text-[10px] font-medium">{item.label}</span>
             </Link>
           )
         })}
