@@ -1,0 +1,706 @@
+{
+  "main": {
+    "id": "d3536b40bec6e0e1",
+    "type": "split",
+    "children": [
+      {
+        "id": "eeefff6dd6ec7874",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8b7e54216a90bdb0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "1bee1cf5b386ed9b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "DOCS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "DOCS"
+            }
+          },
+          {
+            "id": "a7d755bd4050ea88",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01-PAPEL-DO-AGENTE-COORDENADOR.md.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "01-PAPEL-DO-AGENTE-COORDENADOR.md"
+            }
+          },
+          {
+            "id": "df89de9309e43aea",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Nova aba"
+            }
+          },
+          {
+            "id": "dc1b6ed8446524e9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "PROMPTS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "PROMPTS"
+            }
+          },
+          {
+            "id": "0e227a022b639ae2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CONFIG.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CONFIG"
+            }
+          },
+          {
+            "id": "3faf50e7c0ea46f7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "b435bf34f144f868",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "80498ca4592f702b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "SANDBOX.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "SANDBOX"
+            }
+          },
+          {
+            "id": "3f6225363a18ad8f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "DOCS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "DOCS"
+            }
+          },
+          {
+            "id": "9c5fcbf747f8c63f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "4712f9d9cb334036",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "15a21759b3b1cb76",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "befb0e8edb3c7b3b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "2a83e8c8f5badeab",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TESTE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TESTE"
+            }
+          },
+          {
+            "id": "2165a3a454ae5c47",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "a2df794e38cba37e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TESTE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TESTE"
+            }
+          },
+          {
+            "id": "a848ba3fdf7206b3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "TESTE.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "TESTE"
+            }
+          },
+          {
+            "id": "b0d984afb3328225",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README.md"
+            }
+          },
+          {
+            "id": "34038fc5f8bf1b40",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "efa947d5e9da3fb5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "ae6928eaf53d6622",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "540b2c8394c3eb31",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "873ac932178005c9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "10ac1e9e30657c9a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "85ca9edd65368d2c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "a962e622a77df926",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "0923687fb57fcb8d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "88ec9c3011671c11",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "cdae2b42b666fbf9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "4be93c5b11ccef1a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "DOCS.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "DOCS"
+            }
+          },
+          {
+            "id": "db116932475f6dc1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "GITHUB.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "GITHUB"
+            }
+          },
+          {
+            "id": "7988e4ff441eff44",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "099c19b2a9297606",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "5f08d9ae8be076ca",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "xquads_squad_worldclass.yaml.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "xquads_squad_worldclass.yaml"
+            }
+          },
+          {
+            "id": "8f14a2dbde2c8a9d",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Visualização em gráfico"
+            }
+          }
+        ],
+        "currentTab": 35
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "123d7534ce0de36c",
+    "type": "split",
+    "children": [
+      {
+        "id": "42902aa596f99a54",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fe6b3b03898dd13e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "408cd29f7907b7dd",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "README",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "34e5f3b2fdff532e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ca0d7882ea14a041",
+    "type": "split",
+    "children": [
+      {
+        "id": "1d413a24badea671",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "47287b7e81178c7e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "77fd4b0b5570c8af",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "71e7f9c438077f4f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "ae46fcfab1a8abc4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "acf3ebf7598e2069",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "fe6b3b03898dd13e",
+  "lastOpenFiles": [
+    "CARTELA_BOLSO.md.md",
+    "INDEX.md.md",
+    "xquads_squad_worldclass.yaml.md",
+    "ARCHITECTURE.md.md",
+    "FINAL_PROJECT_SUMMARY.md.md",
+    "scripts.md",
+    "env.example.md",
+    "DOCS.md",
+    "Sem título.canvas",
+    "2026-05-26.md",
+    "GITHUB.md",
+    "CHECKLIST_FINAL.md.md",
+    "PASSO_A_PASSO.md.md",
+    "GITHUB_UPLOAD_GUIDE.md.md",
+    "XQuads Squad Worldclass.base.base",
+    "OFERTA PRINCIPAL.md",
+    "HISTORICO_GPT_E_GEMINI.MD.md",
+    "DOCS_INDEX.md.md",
+    "DEPLOY_CHECKLIST.md.md",
+    "QUICK_REFERENCE.md.md",
+    "RUNBOOK.md.md",
+    "SUMMARY.md.md",
+    "README.md.md",
+    "TESTE.md",
+    "SKILLS HABILIDADES.md",
+    "SEGUNDO CEREBRO.md",
+    "pyprojecy.toml.md",
+    "PROMPTS.md",
+    "PORJETO",
+    "DADOS E DECISOES",
+    "SKILLS HABILIDADES",
+    "DADOS DA OFERTA",
+    "HISTORICOS",
+    "Sem título/desktop.ini",
+    "SEGUNDO CEREBRO ESSA E A PASTA PRINCIOAL TUDO FICA AQUI",
+    "OFERTA  PRINCIPAL",
+    "OFERTA PRINCIPAL"
+  ]
+}
